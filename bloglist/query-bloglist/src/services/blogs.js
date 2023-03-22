@@ -3,11 +3,8 @@ import {
   SetNotification,
   useNotificationDispatch,
 } from "../components/NotificationContext";
-import { likeBlog, createBlog, getBlogs, SetHeaders, deleteBlog } from "./requests";
+import { likeBlog, createBlog, getBlogs, deleteBlog } from "./requests";
 
-export const SetToken = (newToken) => {
-  SetHeaders(newToken);
-};
 
 export const useBlog = () => {
   const fetchQuery = useQuery("blogs", getBlogs, {

@@ -1,20 +1,18 @@
 import React, { useState } from "react";
-import loginService from "../services/login";
 import { SetNotification, useNotificationDispatch } from "./NotificationContext";
+import { useLogin } from "./AuthenticationContext";
 
-const Login = ({ setUser }) => {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const notificationDispatch = useNotificationDispatch();
+  const logIn = useLogin();
 
   const login = async (event) => {
     event.preventDefault();
-
     try {
-      const user = await loginService.login({ username, password });
-      window.localStorage.setItem("loggedInUser", JSON.stringify(user));
-      setUser(user);
+      logIn({ username, password });
       setUsername("");
       setPassword("");
     } catch (exception) {
