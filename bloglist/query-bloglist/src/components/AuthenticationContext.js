@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useReducer, useMemo } from "react";
 import { SetToken } from "../services/requests";
 import loginService from "../services/login";
 
@@ -15,8 +15,9 @@ const userReducer = (state, action) => {
 
 const UserContext = createContext();
 
-export const useLogin = () => {
-  const dispatch = useContext(UserContext)[1];
+export const useLogin = (dispatch=null) => {
+  dispatch = dispatch ? dispatch : useContext(UserContext)[1];
+
   return async (credentials = null) => {
     let user;
     if (!credentials) {
@@ -31,7 +32,6 @@ export const useLogin = () => {
   };
 };
 
-
 export const useLogout = () => {
   const dispatch = useContext(UserContext)[1];
   return () => {
@@ -40,17 +40,19 @@ export const useLogout = () => {
   };
 };
 
-
 export const useUser = () => {
-  const [ user ] = useContext(UserContext);
-
+  const [user] = useContext(UserContext);
   return user;
 };
 
-
 export const AuthenticationProvider = (props) => {
   const [user, dispatch] = useReducer(userReducer, {});
+  const logIn = useLogin(dispatch);
 
+  useMemo(() => {
+    logIn();
+  }, []);
+  
   return (
     <UserContext.Provider value={[user, dispatch]}>
       {props.children}
