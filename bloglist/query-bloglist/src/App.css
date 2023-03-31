@@ -1,0 +1,20 @@
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: 300ms;
+}
+
+.list a {
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.userList a:hover {
+    text-decoration: underline;
+    color:rgb(117, 117, 117);
+}
+
+.list a:hover {
+    background-color: rgb(70, 70, 70, 0.1);
+    font-size: large;
+}

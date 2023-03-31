@@ -1,9 +1,14 @@
+import App from "../App";
 import { useEffect } from "react";
 import { useNavigate, useRoutes } from "react-router-dom";
-import App from "../App";
-import { useUser } from "../components/AuthenticationContext";
-import Login from "../components/Login";
+import { useAuth } from "../components/AuthenticationContext";
+
+//  Pages
+import Login from "../pages/Login";
 import Home from "../pages/Home";
+import Users from "../pages/Users";
+import User from "../pages/User";
+import Blog from "../pages/Blog";
 
 const MainRoutes = {
   path: "/",
@@ -15,18 +20,41 @@ const MainRoutes = {
       exact: true,
     },
     {
-      path: "/login",
+      path: "login",
       element: <Login />,
     },
+    {
+      path: "users",
+      children: [
+        {
+          path: "",
+          element: <Users />,
+          exact: true,
+        },
+        {
+          path: ":userId",
+          element: <User />
+        }
+      ]
+    },
+    {
+      path: "blogs",
+      children: [
+        {
+          path: ":blogId",
+          element: <Blog />
+        }
+      ]
+    }
   ],
 };
 
 function Routes() {
   const navigate = useNavigate();
-  const user = useUser();
+  const user = useAuth();
 
   useEffect(() => {
-    user ? navigate("/") : navigate("/login");
+    user ? null : navigate("/login");
   }, [user]);
 
   return useRoutes([MainRoutes]);

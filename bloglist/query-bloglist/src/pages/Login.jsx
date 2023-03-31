@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { SetNotification, useNotificationDispatch } from "./NotificationContext";
-import { useLogin } from "./AuthenticationContext";
+import { SetNotification, useNotificationDispatch } from "../components/NotificationContext";
+import { useLogin } from "../components/AuthenticationContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,6 +17,7 @@ const Login = () => {
       logIn({ username, password });
       setUsername("");
       setPassword("");
+      navigate("/");
     } catch (exception) {
       SetNotification(notificationDispatch, { content: "Incorrect Username or Password", type: "Error" } , 3);
     }

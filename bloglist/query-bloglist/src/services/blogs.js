@@ -6,7 +6,7 @@ import {
 import { likeBlog, createBlog, getBlogs, deleteBlog } from "./requests";
 
 
-export const useBlog = () => {
+export const useBlogs = () => {
   const fetchQuery = useQuery("blogs", getBlogs, {
     retry: false,
     refetchOnWindowFocus: false,
@@ -15,14 +15,23 @@ export const useBlog = () => {
   return { blogs: fetchQuery };
 };
 
+export const useBlog = (id) => {
+  const queryClient = useQueryClient();
+  const blogs = queryClient.getQueryData("blogs");
+  
+  if (!blogs) return null;
+
+  return blogs.filter(blog => blog.id === id)[0];
+};
+
 export const usePostBlog = () => {
   const queryClient = useQueryClient();
   const notificationDispatch = useNotificationDispatch();
 
   const newBlogMutation = useMutation(createBlog, {
     onSuccess: (newBlog) => {
-      const anecdotes = queryClient.getQueryData("blogs");
-      queryClient.setQueryData("blogs", anecdotes.concat(newBlog));
+      const blogs = queryClient.getQueryData("blogs");
+      queryClient.setQueryData("blogs", blogs.concat(newBlog));
       SetNotification(notificationDispatch, { content: "Success!" }, 3);
     },
     onError: () => {

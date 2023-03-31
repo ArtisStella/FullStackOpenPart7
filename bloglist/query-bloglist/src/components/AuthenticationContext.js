@@ -40,7 +40,7 @@ export const useLogout = () => {
   };
 };
 
-export const useUser = () => {
+export const useAuth = () => {
   const [user] = useContext(UserContext);
   return user;
 };
