@@ -14,10 +14,11 @@ const Login = () => {
   const login = async (event) => {
     event.preventDefault();
     try {
-      logIn({ username, password });
+      const loggedIn = await logIn({ username, password });
+      console.log(loggedIn);
       setUsername("");
       setPassword("");
-      navigate("/");
+      if (loggedIn) navigate("/");
     } catch (exception) {
       SetNotification(notificationDispatch, { content: "Incorrect Username or Password", type: "Error" } , 3);
     }

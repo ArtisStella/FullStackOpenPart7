@@ -14,14 +14,16 @@ const App = () => {
     <div className="container mt-4">
       <h2>Blogs</h2>
       {authUser ? (
-        <div>
-          <span className="me-2">{authUser.name} logged in.</span>
-          <button className="btn btn-outline-primary btn-sm" onClick={logout}>
-            Log out
-          </button>
-        </div>
+        <>
+          <div>
+            <span className="me-2">{authUser.name} logged in.</span>
+            <button className="btn btn-outline-primary btn-sm" onClick={logout}>
+              Log out
+            </button>
+          </div>
+          <Navigation />
+        </>
       ) : null }
-      <Navigation />
       <Notification />
       <hr />
       <Outlet />

@@ -27,8 +27,12 @@ export const useLogin = (dispatch=null) => {
       user = await loginService.login(credentials);
       window.localStorage.setItem("loggedInUser", JSON.stringify(user));
     }
-    if (user) SetToken(user.token);
-    dispatch({ type: "SET", payload: user });
+    if (user) {
+      SetToken(user.token);
+      dispatch({ type: "SET", payload: user });
+      return true;
+    }
+    return false;
   };
 };
 

@@ -4,7 +4,7 @@ import {
   useNotificationDispatch,
 } from "../components/NotificationContext";
 import { likeBlog, createBlog, getBlogs, deleteBlog } from "./requests";
-
+import { getBlog } from "./requests";
 
 export const useBlogs = () => {
   const fetchQuery = useQuery("blogs", getBlogs, {
@@ -17,11 +17,23 @@ export const useBlogs = () => {
 
 export const useBlog = (id) => {
   const queryClient = useQueryClient();
-  const blogs = queryClient.getQueryData("blogs");
-  
-  if (!blogs) return null;
 
-  return blogs.filter(blog => blog.id === id)[0];
+  const fetchBlog = () => {
+    const blogs = queryClient.getQueryData("blogs");
+
+    if (!blogs) {
+      return getBlog(id);
+    }
+
+    return blogs.filter((blog) => blog.id === id)[0];
+  };
+
+  const fetchQuery = useQuery("blog", fetchBlog, {
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+
+  return fetchQuery;
 };
 
 export const usePostBlog = () => {
@@ -45,7 +57,6 @@ export const usePostBlog = () => {
 
   return (blog) => newBlogMutation.mutate(blog);
 };
-
 
 export const useLikeBlog = () => {
   const queryClient = useQueryClient();
@@ -72,7 +83,11 @@ export const useDeleteBlog = () => {
         const blogs = queryClient.getQueryData("blogs");
         const filteredBlogs = blogs.filter((e) => e.id !== id);
         queryClient.setQueryData("blogs", filteredBlogs);
-        SetNotification(notificationDispatch, { content: "Blog deleted succesfully!" }, 3);
+        SetNotification(
+          notificationDispatch,
+          { content: "Blog deleted succesfully!" },
+          3
+        );
       })
       .catch(() => {
         SetNotification(
